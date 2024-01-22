@@ -1,6 +1,8 @@
 import { Pressable, PressableProps, Text } from 'react-native';
 
-import Animated, { useSharedValue, useAnimatedStyle } from 'react-native-reanimated'
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated'
+
+const PressableAnimated = Animated.createAnimatedComponent(Pressable)
 
 import { THEME } from '../../styles/theme';
 import { styles } from './styles';
@@ -24,40 +26,38 @@ export function Level({ title, type = 'EASY', isChecked = false, ...rest }: Prop
 
   const animatedContainerStyles = useAnimatedStyle(() => {
     return {
-        transform: [{scale: scale.value}]
+      transform: [{ scale: scale.value }]
     }
   })
 
   function onPressIn() {
-    scale.value = 1.7;
+    scale.value = withTiming(1.1);
   }
 
   function onPressOut() {
-    scale.value = 1;
+    scale.value = withTiming(1);
   }
 
   return (
-    <Pressable 
+    <PressableAnimated
       onPressIn={onPressIn}
       onPressOut={onPressOut}
-    {...rest}
-
-    >
-      <Animated.View style={
+      {...rest}
+      style={
         [
           styles.container,
           animatedContainerStyles,
           { borderColor: COLOR, backgroundColor: isChecked ? COLOR : 'transparent' }
         ]
-      }>
-        <Text style={
-          [
-            styles.title,
-            { color: isChecked ? THEME.COLORS.GREY_100 : COLOR }
-          ]}>
-          {title}
-        </Text>
-      </Animated.View>
-    </Pressable>
+      }
+    >
+      <Text style={
+        [
+          styles.title,
+          { color: isChecked ? THEME.COLORS.GREY_100 : COLOR }
+        ]}>
+        {title}
+      </Text>
+    </PressableAnimated>
   );
 }
