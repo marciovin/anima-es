@@ -20,7 +20,7 @@ export function History() {
 
   const { goBack } = useNavigation();
 
-  const swipeableRefs = useRef<Swipeable[]>([]); 
+  const swipeableRefs = useRef<Swipeable[]>([]);
 
   async function fetchHistory() {
     const response = await historyGetAll();
@@ -28,12 +28,26 @@ export function History() {
     setIsLoading(false);
   }
 
-  async function remove(id: string, index: number) {
-    swipeableRefs.current?.[index].close()
+  async function remove(id: string) {
 
     await historyRemove(id);
 
     fetchHistory();
+  }
+
+  function handleRemove(id: string, index: number) {
+    swipeableRefs.current?.[index].close()
+
+    Alert.alert(
+      'Remover',
+      'Deseja remover está atividade?',
+      [
+        {
+          text: 'Sim', onPress: () => remove(id)
+        },
+        { text: 'Não', style: 'cancel' }
+      ]
+    );
   }
 
   useEffect(() => {
@@ -59,30 +73,30 @@ export function History() {
       >
         {
           history.map((item, index) => (
-            <Animated.View 
-            key={item.id}
-            entering={SlideInRight}
-            exiting={SlideInRight}
-            layout={Layout.springify()}
+            <Animated.View
+              key={item.id}
+              entering={SlideInRight}
+              exiting={SlideInRight}
+              layout={Layout.springify()}
             >
-            <Swipeable
-            ref={(ref) => {
-              if(ref){
-                swipeableRefs.current.push(ref)
-              }
-            }}
-            overshootLeft={false}
-            renderLeftActions={() => (
-              <Pressable
-               style={styles.swipeableRemove}
-               onPress={() => remove(item.id, index)}
-               >
-                  <Trash size={32} color={THEME.COLORS.DANGER_LIGHT}/>
-              </Pressable>
-            )}
-            >
-              <HistoryCard data={item} />
-            </Swipeable>
+              <Swipeable
+                ref={(ref) => {
+                  if (ref) {
+                    swipeableRefs.current.push(ref)
+                  }
+                }}
+                overshootLeft={false}
+                renderLeftActions={() => (
+                  <Pressable
+                    style={styles.swipeableRemove}
+                    onPress={() => handleRemove(item.id, index)}
+                  >
+                    <Trash size={32} color={THEME.COLORS.DANGER_LIGHT} />
+                  </Pressable>
+                )}
+              >
+                <HistoryCard data={item} />
+              </Swipeable>
             </Animated.View>
           ))
         }
