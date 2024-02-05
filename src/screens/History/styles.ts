@@ -9,5 +9,12 @@ export const styles = StyleSheet.create({
   },
   history: {
     padding: 32,
+  },
+  swipeableRemove: {
+    width: 90,
+    height: 90,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
   }
-});
+}); 

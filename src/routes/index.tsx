@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, ThemeProvider } from '@react-navigation/native';
 
 import { THEME } from '../styles/theme';
 
