@@ -160,12 +160,12 @@ export function Quiz() {
     const moveToLeft = event.translationX < 0
 
     if(moveToLeft) {
-      CardPosition.value = event.translationX
+      cardPosition.value = event.translationX
     }
 
-    CardPosition.value = event.translationX
+    cardPosition.value = event.translationX
   }).onEnd(() => {
-    CardPosition.value = withTiming(0)
+    cardPosition.value = withTiming(0)
   })
 
   const dragStyles = useAnimatedStyle(() => {
