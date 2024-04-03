@@ -13,7 +13,7 @@ import { Question } from '../../components/Question';
 import { QuizHeader } from '../../components/QuizHeader';
 import { ConfirmButton } from '../../components/ConfirmButton';
 import { OutlineButton } from '../../components/OutlineButton';
-import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming, interpolate, Easing, useAnimatedScrollHandler } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming, interpolate, Easing, useAnimatedScrollHandler, Extrapolate } from 'react-native-reanimated';
 import { ProgressBar } from '../../components/ProgressBar';
 import { THEME } from '../../styles/theme';
 
@@ -132,7 +132,8 @@ export function Quiz() {
       paddingTop: 50,
       backgroundColor: THEME.COLORS.GREY_500,
       width: "110%",
-      left: "-5%"
+      left: "-5%",
+      opacity: interpolate(scrollY.value, [50, 90], [0, 1], Extrapolate.CLAMP)
     }
   });
 
