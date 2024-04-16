@@ -169,8 +169,16 @@ export function Quiz() {
     }
   })
 
+  const onLongPress = Gesture
+    .LongPress()
+    .minDuration(400)
+    .onStart(() => {
+      console.log("Gesto ativado!!")
+    })
+
   const onPan = Gesture
     .Pan()
+    .activateAfterLongPress(400)
     .onUpdate((event) => {
       const moveToLeft = event.translationX < 0
 
