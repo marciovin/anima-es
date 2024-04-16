@@ -15,6 +15,7 @@ import { Question } from '../../components/Question';
 import { QuizHeader } from '../../components/QuizHeader';
 import { ConfirmButton } from '../../components/ConfirmButton';
 import { OutlineButton } from '../../components/OutlineButton';
+import { OverlayFeedback } from '../../components/OverlayFeedback';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -218,7 +219,9 @@ export function Quiz() {
 
   return (
     <View style={styles.container}>
-      <Animated.View style={fixedProgressBarStyles} >
+      <OverlayFeedback status={1} />
+
+      <Animated.View style={fixedProgressBarStyles}>
         <Text style={styles.title}>
           {quiz.title}
         </Text>
