@@ -15,7 +15,6 @@ import { Question } from '../../components/Question';
 import { QuizHeader } from '../../components/QuizHeader';
 import { ConfirmButton } from '../../components/ConfirmButton';
 import { OutlineButton } from '../../components/OutlineButton';
-import { OverlayFeedback } from '../../components/OverlayFeedback';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -37,7 +36,6 @@ interface Params {
 
 const CARD_INCLINATION = 10
 
-
 type QuizProps = typeof QUIZ[0];
 
 export function Quiz() {
@@ -50,10 +48,9 @@ export function Quiz() {
   const shake = useSharedValue(0)
   const scrollY = useSharedValue(0)
   const cardPosition = useSharedValue(0)
+  const CARD_SKIP_AREA = (-200)
 
   const { navigate } = useNavigation();
-
-  const CARD_SKIP_AREA = (-200)
 
   const route = useRoute();
   const { id } = route.params as Params;
@@ -61,6 +58,7 @@ export function Quiz() {
   function handleSkipConfirm() {
     Alert.alert('Pular', 'Deseja realmente pular a questão?', [
       { text: 'Sim', onPress: () => handleNextQuestion() },
+
       { text: 'Não', onPress: () => { } }
     ]);
   }
@@ -123,6 +121,8 @@ export function Quiz() {
   }
 
   useEffect(() => {
+
+
     if (quiz.questions) {
       handleNextQuestion();
     }
@@ -154,13 +154,10 @@ export function Quiz() {
       backgroundColor: THEME.COLORS.GREY_500,
       width: "110%",
       left: "-5%",
-
       opacity: interpolate(scrollY.value, [50, 90], [0, 1], Extrapolate.CLAMP),
-
       transform: [
         { translateY: interpolate(scrollY.value, [50, 100], [-40, 0], Extrapolate.CLAMP) }
       ]
-
     }
   });
 
@@ -170,16 +167,8 @@ export function Quiz() {
     }
   })
 
-  const onLongPress = Gesture
-    .LongPress()
-    .minDuration(400)
-    .onStart(() => {
-      console.log("Gesto ativado!!")
-    })
-
   const onPan = Gesture
     .Pan()
-    .activateAfterLongPress(400)
     .onUpdate((event) => {
       const moveToLeft = event.translationX < 0
 
@@ -189,6 +178,7 @@ export function Quiz() {
 
       cardPosition.value = event.translationX
     }).onEnd((event) => {
+
       if (event.translationX < CARD_SKIP_AREA) {
         runOnJS(handleSkipConfirm)()
       }
@@ -200,6 +190,7 @@ export function Quiz() {
     const rotateZ = cardPosition.value / CARD_INCLINATION;
 
     return {
+
       transform: [
         { translateX: cardPosition.value },
         { rotateZ: `${rotateZ}deg` }
@@ -219,9 +210,7 @@ export function Quiz() {
 
   return (
     <View style={styles.container}>
-      <OverlayFeedback status={1} />
-
-      <Animated.View style={fixedProgressBarStyles}>
+      <Animated.View style={fixedProgressBarStyles} >
         <Text style={styles.title}>
           {quiz.title}
         </Text>
