@@ -1,8 +1,15 @@
 import { useWindowDimensions } from "react-native"
-import Animated from "react-native-reanimated";
+import Animated, {
+  useSharedValue,
+  withSequence,
+  withTiming,
+  Easing,
+  useAnimatedStyle,
+} from "react-native-reanimated";
 import { Canvas, Rect, BlurMask } from "@shopify/react-native-skia"
 
 import { THEME } from "../../styles/theme"
+import { useEffect } from "react";
 
 const STATUS = ["transparent", THEME.COLORS.BRAND_LIGHT, THEME.COLORS.DANGER_LIGHT]
 
@@ -12,11 +19,25 @@ type Props = {
 
 export function OverlayFeedback({ status }: Props) {
   const color = STATUS[status];
+  const opacity = useSharedValue(0)
 
   const { height, width } = useWindowDimensions()
 
+  const styleAnimated = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value
+    }
+  })
+
+  useEffect(() => {
+    opacity.value = withSequence(
+      withTiming(1, { duration: 200, easing: Easing.bounce }),
+      withTiming(0),
+    )
+  }, [status]);
+
   return (
-    <Animated.View style={{ height, width, position: "absolute" }}>
+    <Animated.View style={[{ height, width, position: "absolute" }, styleAnimated]}>
       <Canvas style={{ flex: 1 }}>
         <Rect
           x={0}

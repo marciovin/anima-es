@@ -29,6 +29,7 @@ import Animated, {
 import { ProgressBar } from '../../components/ProgressBar';
 import { THEME } from '../../styles/theme';
 import { isLoading } from 'expo-font';
+import { OverlayFeedback } from "../../components/OverlayFeedback"
 
 interface Params {
   id: string;
@@ -40,6 +41,7 @@ type QuizProps = typeof QUIZ[0];
 
 export function Quiz() {
   const [points, setPoints] = useState(0);
+  const [statusReplay, setStatusReplay] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [quiz, setQuiz] = useState<QuizProps>({} as QuizProps);
@@ -92,8 +94,10 @@ export function Quiz() {
     }
 
     if (quiz.questions[currentQuestion].correct === alternativeSelected) {
+      setStatusReplay(1)
       setPoints(prevState => prevState + 1);
     } else {
+      setStatusReplay(2)
       shakeAnimation()
     }
 
@@ -210,6 +214,8 @@ export function Quiz() {
 
   return (
     <View style={styles.container}>
+      <OverlayFeedback status={statusReplay} />
+
       <Animated.View style={fixedProgressBarStyles} >
         <Text style={styles.title}>
           {quiz.title}
