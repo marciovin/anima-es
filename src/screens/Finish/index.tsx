@@ -1,5 +1,6 @@
 import { Text, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { Stars } from "../../components/stars"
 
 import { Button } from '../../components/Button';
 
