@@ -96,6 +96,7 @@ export function Quiz() {
     if (quiz.questions[currentQuestion].correct === alternativeSelected) {
       setStatusReplay(1)
       setPoints(prevState => prevState + 1);
+
     } else {
       setStatusReplay(2)
       shakeAnimation()
@@ -121,12 +122,18 @@ export function Quiz() {
   }
 
   function shakeAnimation() {
-    shake.value = withSequence(withTiming(3, { duration: 400, easing: Easing.bounce }), withTiming(0))
+    shake.value = withSequence(
+      withTiming(3, { duration: 400, easing: Easing.bounce }),
+      withTiming(0, undefined, (Finished) => {
+        'worklet'
+        if (Finished) {
+          runOnJS(handleNextQuestion)()
+        }
+      })
+    );
   }
 
   useEffect(() => {
-
-
     if (quiz.questions) {
       handleNextQuestion();
     }
@@ -249,6 +256,7 @@ export function Quiz() {
               question={quiz.questions[currentQuestion]}
               alternativeSelected={alternativeSelected}
               setAlternativeSelected={setAlternativeSelected}
+              onUnmount={() => setStatusReplay(0)}
             />
           </Animated.View>
         </GestureDetector>
