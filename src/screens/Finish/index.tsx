@@ -19,6 +19,7 @@ export function Finish() {
 
   return (
     <View style={styles.container}>
+      <Stars />
       <View style={styles.message}>
         <Text style={styles.title}>
           Parabéns!

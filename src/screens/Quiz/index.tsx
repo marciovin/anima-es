@@ -178,8 +178,7 @@ export function Quiz() {
     }
   })
 
-  const onPan = Gesture
-    .Pan()
+  const onPan = Gesture.Pan()
     .onUpdate((event) => {
       const moveToLeft = event.translationX < 0
 
