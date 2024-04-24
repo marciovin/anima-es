@@ -26,6 +26,7 @@ import Animated, {
   Extrapolate,
   runOnJS
 } from 'react-native-reanimated';
+import { Audio } from "expo-av"
 import { ProgressBar } from '../../components/ProgressBar';
 import { THEME } from '../../styles/theme';
 import { isLoading } from 'expo-font';
@@ -56,6 +57,14 @@ export function Quiz() {
 
   const route = useRoute();
   const { id } = route.params as Params;
+
+  async function palySound(iscorrect: boolean) {
+    const file = iscorrect ? require('../../assets/correct.mp3') : require('../../assets/wrong.mp3');
+    const { sound } = await Audio.Sound.createAsync(file, { shouldPlay: true });
+
+    await sound.setPositionAsync(0);
+    await sound.playAsync();
+  }
 
   function handleSkipConfirm() {
     Alert.alert('Pular', 'Deseja realmente pular a questão?', [
@@ -94,10 +103,12 @@ export function Quiz() {
     }
 
     if (quiz.questions[currentQuestion].correct === alternativeSelected) {
-      setStatusReplay(1)
       setPoints(prevState => prevState + 1);
+      await palySound(true)
+      setStatusReplay(1)
 
     } else {
+      await palySound(false)
       setStatusReplay(2)
       shakeAnimation()
     }
